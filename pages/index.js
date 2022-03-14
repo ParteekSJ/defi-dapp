@@ -93,7 +93,6 @@ export default function Home() {
       }
     } else {
       console.log("Please download Metamask.");
-      return <NoMetamask />;
     }
   };
 
