@@ -100,9 +100,12 @@ export default function Home() {
 
   return (
     <>
-      {loaded ? (
+      {!loaded ? (
         web3 ? (
           <div className="h-screen w-full">
+            <Head>
+              <title>Blockchain dApp</title>
+            </Head>
             {isWrongChain ? <WrongChain /> : <></>}
             <Navbar />
             {isConnected ? (
@@ -127,41 +130,6 @@ export default function Home() {
     </>
   );
 }
-
-// return (
-//   <>
-//     {isAvailable ? (
-//       <div className="h-screen w-full">
-//         <Head>
-//           <title>Blockchain dApp</title>
-//         </Head>
-//         {isWrongChain ? (
-//           <WrongChain />
-//         ) : loaded ? (
-//           <>
-//             <Navbar />
-//             {isConnected ? (
-//               <>
-//                 <TabSection />
-//                 <div className="mt-5">
-//                   {selectedTab == 0 && <DepositTab />}
-//                   {selectedTab == 1 && <WithdrawTab />}
-//                   {selectedTab == 2 && <HoldingsTab />}
-//                 </div>
-//               </>
-//             ) : (
-//               <NoAccountConnected />
-//             )}
-//           </>
-//         ) : (
-//           <Loader />
-//         )}
-//       </div>
-//     ) : (
-//       <NoMetamask />
-//     )}
-//   </>
-// );
 
 /**
  * RINKEBY
