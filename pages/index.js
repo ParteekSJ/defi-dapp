@@ -100,7 +100,7 @@ export default function Home() {
 
   return (
     <>
-      {!loaded ? (
+      {loaded ? (
         web3 ? (
           <div className="h-screen w-full">
             <Head>
