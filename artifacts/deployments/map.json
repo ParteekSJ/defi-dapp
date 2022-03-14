@@ -1,0 +1,20 @@
+{
+  "1337": {
+    "Token": [
+      "0xAedE31639648D4EA3ae9CB155d909D17c67E3423",
+      "0x84cb040913c9D03129ef7661eF77DAdF38a07F53"
+    ],
+    "dBank": [
+      "0x2eda2652eB9266DAf7d80522708f9AcCF644603C",
+      "0x7CFaE67711f2ffc0D9512d820326fe5cBCd1e378"
+    ]
+  },
+  "4": {
+    "Token": [
+      "0x6760a15CF4AAc49Ee4570667b06B7f0391D3Bd01"
+    ],
+    "dBank": [
+      "0x888f585BEDfe9990E2Ff342855b7EdC63D706E1c"
+    ]
+  }
+}
