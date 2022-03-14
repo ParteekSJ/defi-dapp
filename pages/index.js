@@ -17,7 +17,7 @@ import {
   SET_CONTRACTS_LOADED,
   SET_TOKEN_CONTRACT,
 } from "@features/contractSlice";
-import { SET_WEB3, SET_WEB3_AVAILABILITY } from "@features/web3Slice";
+import { SET_WEB3 } from "@features/web3Slice";
 import Loader from "@components/Loader";
 import { ethers } from "ethers";
 import Head from "next/head";
@@ -33,6 +33,7 @@ export default function Home() {
   const { selectedTab } = useSelector((state) => ({ ...state.tab }));
   const { loaded } = useSelector((state) => ({ ...state.contract }));
   const { web3 } = useSelector((state) => ({ ...state.web3 }));
+  const [isAvailable, setIsAvailable] = useState(false);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -47,11 +48,11 @@ export default function Home() {
   };
 
   const loadBlockchainData = async () => {
-    // Check if metamask exists
-    let detectProvider = await detectEthereumProvider();
-    if (detectProvider) {
-      setAccountListener(detectProvider); // metamask provider listening for events
+    let metamaskProvider = await detectEthereumProvider();
 
+    if (metamaskProvider) {
+      setAccountListener(metamaskProvider); // metamask provider listening for events
+      setIsAvailable(true);
       const web3Provider = new ethers.providers.Web3Provider(window.ethereum);
       dispatch(SET_WEB3(web3Provider));
 
@@ -93,44 +94,74 @@ export default function Home() {
       }
     } else {
       console.log("Please download Metamask.");
+      setIsAvailable(false);
     }
   };
 
   return (
     <>
-      {web3 ? (
-        <div className="h-screen w-full">
-          <Head>
-            <title>Blockchain dApp</title>
-          </Head>
-          {isWrongChain ? (
-            <WrongChain />
-          ) : loaded ? (
-            <>
-              <Navbar />
-              {isConnected ? (
-                <>
-                  <TabSection />
-                  <div className="mt-5">
-                    {selectedTab == 0 && <DepositTab />}
-                    {selectedTab == 1 && <WithdrawTab />}
-                    {selectedTab == 2 && <HoldingsTab />}
-                  </div>
-                </>
-              ) : (
-                <NoAccountConnected />
-              )}
-            </>
-          ) : (
-            <Loader />
-          )}
-        </div>
+      {loaded ? (
+        web3 ? (
+          <div className="h-screen w-full">
+            {isWrongChain ? <WrongChain /> : <></>}
+            <Navbar />
+            {isConnected ? (
+              <>
+                <TabSection />
+                <div className="mt-5">
+                  {selectedTab == 0 && <DepositTab />}
+                  {selectedTab == 1 && <WithdrawTab />}
+                  {selectedTab == 2 && <HoldingsTab />}
+                </div>
+              </>
+            ) : (
+              <NoAccountConnected />
+            )}
+          </div>
+        ) : (
+          <NoMetamask />
+        )
       ) : (
-        <NoMetamask />
+        <Loader />
       )}
     </>
   );
 }
+
+// return (
+//   <>
+//     {isAvailable ? (
+//       <div className="h-screen w-full">
+//         <Head>
+//           <title>Blockchain dApp</title>
+//         </Head>
+//         {isWrongChain ? (
+//           <WrongChain />
+//         ) : loaded ? (
+//           <>
+//             <Navbar />
+//             {isConnected ? (
+//               <>
+//                 <TabSection />
+//                 <div className="mt-5">
+//                   {selectedTab == 0 && <DepositTab />}
+//                   {selectedTab == 1 && <WithdrawTab />}
+//                   {selectedTab == 2 && <HoldingsTab />}
+//                 </div>
+//               </>
+//             ) : (
+//               <NoAccountConnected />
+//             )}
+//           </>
+//         ) : (
+//           <Loader />
+//         )}
+//       </div>
+//     ) : (
+//       <NoMetamask />
+//     )}
+//   </>
+// );
 
 /**
  * RINKEBY
