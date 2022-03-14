@@ -17,7 +17,7 @@ import {
   SET_CONTRACTS_LOADED,
   SET_TOKEN_CONTRACT,
 } from "@features/contractSlice";
-import { SET_WEB3 } from "@features/web3Slice";
+import { SET_WEB3, SET_WEB3_AVAILABILITY } from "@features/web3Slice";
 import Loader from "@components/Loader";
 import { ethers } from "ethers";
 import Head from "next/head";
@@ -96,37 +96,39 @@ export default function Home() {
     }
   };
 
-  if (!web3) {
-    return <NoMetamask />;
-  }
-
   return (
-    <div className="h-screen w-full">
-      <Head>
-        <title>Blockchain dApp</title>
-      </Head>
-      {isWrongChain ? (
-        <WrongChain />
-      ) : loaded ? (
-        <>
-          <Navbar />
-          {isConnected ? (
+    <>
+      {web3 ? (
+        <div className="h-screen w-full">
+          <Head>
+            <title>Blockchain dApp</title>
+          </Head>
+          {isWrongChain ? (
+            <WrongChain />
+          ) : loaded ? (
             <>
-              <TabSection />
-              <div className="mt-5">
-                {selectedTab == 0 && <DepositTab />}
-                {selectedTab == 1 && <WithdrawTab />}
-                {selectedTab == 2 && <HoldingsTab />}
-              </div>
+              <Navbar />
+              {isConnected ? (
+                <>
+                  <TabSection />
+                  <div className="mt-5">
+                    {selectedTab == 0 && <DepositTab />}
+                    {selectedTab == 1 && <WithdrawTab />}
+                    {selectedTab == 2 && <HoldingsTab />}
+                  </div>
+                </>
+              ) : (
+                <NoAccountConnected />
+              )}
             </>
           ) : (
-            <NoAccountConnected />
+            <Loader />
           )}
-        </>
+        </div>
       ) : (
-        <Loader />
+        <NoMetamask />
       )}
-    </div>
+    </>
   );
 }
 
